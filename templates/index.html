@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block body %}
+	<h1>Dashboard</h1>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Time</th>
+				<th>Reporter</th>
+				<th>Subject</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for report in reports %}
+				<tr>
+					<td>{{report.report_time}}</td>
+					<td>{{report.reporter}}</td>
+					<td>{{report.email.subject}}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}

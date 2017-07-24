@@ -1,0 +1,81 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Phishing Report",
+	"description": "A report of a suspicious email for evaluation using Trawler.",
+	"type": "object",
+	"properties": {
+		"message_id": {
+			"description": "The Message-ID header for the email, used to identify emails. This format is specified in RFC 2392.",
+			"type": "string",
+			"pattern": "<.+@.+\\..+>"
+		},
+		"reporter": {
+			"description": "The user who sent in this report.",
+			"type": "string",
+			"format": "email"
+		},
+		"report_time": {
+			"description": "The time that the user clicked the Report button, this is not the time when it was actually received.",
+			"type": "string",
+			"format": "date-time"
+		},
+		"sender": {
+			"description": "The sender of the reported email.",
+			"type": "string",
+			"format": "email"
+		},
+		"subject": {
+			"description": "The subject of the email.",
+			"type": "string"
+		},
+		"headers": {
+			"description": "The headers from the email in the format of [[key, value], [key, value]...]. This MUST include all headers, and none should be stripped/excluded.",
+			"type": "array",
+			"items": {
+				"type": "array",
+				"items": {
+					"type": "string",
+					"minItems": 2,
+					"maxItems": 2
+				}
+			}
+		},
+		"tos": {
+			"description": "An array of all email addresses that are in the To field. This exists in the headers as well, but is here for ease of access.",
+			"type": "array",
+			"items": {
+				"type": "string",
+				"format": "email"
+			}
+		},
+		"ccs": {
+			"description": "An array of all email addresses that are in the CC field. This exists in the headers as well, but is here for ease of access.",
+			"type": "array",
+			"items": {
+				"type": "string",
+				"format": "email"
+			}
+		},
+		"attachments": {
+			"description": "An array of attachment objects, with filename, mimetype and a base64 encoded attachment.",
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"filename": {
+						"type": "string"
+					},
+					"mimetype": {
+						"type": "string",
+						"pattern": ".+/.+"
+					},
+					"blob": {
+						"type": "string",
+						"pattern": "[a-zA-Z0-9+/]*[=]{0,3}"
+					}
+				}
+			}
+		}
+	},
+	"required": ["message_id", "reporter", "report_time", "sender", "subject", "headers", "tos", "ccs", "attachments"]
+}
