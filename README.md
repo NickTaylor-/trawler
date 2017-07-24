@@ -1,4 +1,4 @@
-#Trawler
+# Trawler
 
 Trawler is a Flask based web application that allows users to submit suspicious emails via an API for analysis by a SOC/CERT/IT Team/etc. Currently there is no supported submission mechanisms, but a plugin for Outlook is in the works.
 
