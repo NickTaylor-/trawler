@@ -28,6 +28,28 @@
 			"description": "The subject of the email.",
 			"type": "string"
 		},
+		"body": {
+			"description": "The bodies (plaintext, HTML, RTF) of the email.",
+			"type": "object",
+			"properties": {
+				"preffered": {
+					"description": "The preffered mimetype of the email, for cases where multiple formats are sent.",
+					"type": "string"
+				},
+				"plaintext": {
+					"description": "The plaintext version of the body (should almost always be available).",
+					"type": "string"
+				},
+				"html": {
+					"description": "The HTML version of the body.",
+					"type": "string"
+				},
+				"rtf": {
+					"description": "The RTF version of the body.",
+					"type": "string"
+				}
+			}
+		},
 		"headers": {
 			"description": "The headers from the email in the format of [[key, value], [key, value]...]. This MUST include all headers, and none should be stripped/excluded.",
 			"type": "array",
@@ -77,5 +99,5 @@
 			}
 		}
 	},
-	"required": ["message_id", "reporter", "report_time", "sender", "subject", "headers", "tos", "ccs", "attachments"]
+	"required": ["message_id", "reporter", "report_time", "sender", "subject", "body", "headers", "tos", "ccs", "attachments"]
 }

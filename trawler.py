@@ -62,7 +62,9 @@ class Report(db.Model):
 
         # Create email if we do not already have it
         if Email.query.get(email_id) is None:
-            email = Email(email_id, json['sender'], json['subject'])
+            email = Email(email_id, json['sender'], json['subject'],
+                          json['body']['preffered'], json['body']['plaintext'],
+                          json['body']['html'], json['body']['rtf'])
 
             # Add headers
             for index, header in enumerate(json['headers']):
@@ -102,16 +104,23 @@ class Email(db.Model):
     id = db.Column(db.Text, primary_key=True)
     sender = db.Column(db.Text, db.ForeignKey('email_address.email'))
     subject = db.Column(db.Text)
+    preffered_body = db.Column(db.Text)
+    plaintext_body = db.Column(db.Text)
+    html_body = db.Column(db.Text)
+    rtf_body = db.Column(db.Text)
     tos = db.relationship('EmailAddress', secondary=tos,
                           backref=db.backref('to_emails', lazy='dynamic'))
     ccs = db.relationship('EmailAddress', secondary=ccs,
                           backref=db.backref('cc_emails', lazy='dynamic'))
 
-    def __init__(self, email_id, sender, subject):
+    def __init__(self, email_id, sender, subject, preffered_body, plaintext_body, html_body, rtf_body):
         self.id = email_id
         self.sender = sender
         self.subject = subject
-
+        self.preffered_body = preffered_body
+        self.plaintext_body = plaintext_body
+        self.html_body = html_body
+        self.rtf_body = rtf_body
 
 class EmailAddress(db.Model):
     email = db.Column(db.Text, primary_key=True)
