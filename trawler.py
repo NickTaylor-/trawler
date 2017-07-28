@@ -23,6 +23,7 @@ manager.add_command('db', MigrateCommand)
 schemas = dict()
 schemas['reports'] = json.load(open('schemas/report.schema'))
 
+
 @app.route('/')
 @app.route('/dashboard')
 def index():
@@ -38,7 +39,8 @@ def report():
     validate(report, schemas['reports'])
 
     if report is not None:
-        report = Report(report['reporter'], report['report_time'], report['message_id'], report)
+        report = Report(report['reporter'], report['report_time'],
+                        report['message_id'], report)
         return '', 200
     else:
         return 'No JSON found in request.', 415
@@ -46,11 +48,13 @@ def report():
 
 tos = db.Table('tos',
                db.Column('email_id', db.Text, db.ForeignKey('email.id')),
-               db.Column('email_address', db.Text, db.ForeignKey('email_address.email')))
+               db.Column('email_address', db.Text,
+                         db.ForeignKey('email_address.email')))
 
 ccs = db.Table('ccs',
                db.Column('email_id', db.Text, db.ForeignKey('email.id')),
-               db.Column('email_address', db.Text, db.ForeignKey('email_address.email')))
+               db.Column('email_address', db.Text,
+                         db.ForeignKey('email_address.email')))
 
 
 class Report(db.Model):
@@ -58,7 +62,8 @@ class Report(db.Model):
     reporter = db.Column(db.Text)
     report_time = db.Column(db.DateTime)
     email_id = db.Column(db.Text, db.ForeignKey('email.id'))
-    email = db.relationship('Email', backref=db.backref('reports', lazy='dynamic'))
+    email = db.relationship('Email', backref=db.backref('reports',
+                                                        lazy='dynamic'))
 
     def __init__(self, reporter, report_time, email_id, json):
         self.reporter = reporter
@@ -73,7 +78,8 @@ class Report(db.Model):
 
             # Add headers
             for index, header in enumerate(json['headers']):
-                db.session.add(EmailHeader(email_id, index, header[0], header[1]))
+                db.session.add(EmailHeader(email_id, index, header[0],
+                                           header[1]))
 
             # Add recipients (tos and ccs)
             for to in json['tos']:
@@ -94,7 +100,9 @@ class Report(db.Model):
 
             # Add attachments
             for attachment in json['attachments']:
-                db.session.add(EmailAttachment(email_id, attachment['filename'], attachment['mimetype'],
+                db.session.add(EmailAttachment(email_id,
+                                               attachment['filename'],
+                                               attachment['mimetype'],
                                                attachment['blob']))
 
             # Add email to database
@@ -118,7 +126,8 @@ class Email(db.Model):
     ccs = db.relationship('EmailAddress', secondary=ccs,
                           backref=db.backref('cc_emails', lazy='dynamic'))
 
-    def __init__(self, email_id, sender, subject, preffered_body, plaintext_body, html_body, rtf_body):
+    def __init__(self, email_id, sender, subject, preffered_body,
+                 plaintext_body, html_body, rtf_body):
         self.id = email_id
         self.sender = sender
         self.subject = subject
@@ -126,6 +135,7 @@ class Email(db.Model):
         self.plaintext_body = plaintext_body
         self.html_body = html_body
         self.rtf_body = rtf_body
+
 
 class EmailAddress(db.Model):
     email = db.Column(db.Text, primary_key=True)
