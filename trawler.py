@@ -141,6 +141,7 @@ class Email(db.Model):
     ccs = db.relationship('EmailAddress', secondary=ccs,
                           backref=db.backref('cc_emails', lazy='dynamic'))
     headers = db.relationship('EmailHeader', backref='email', lazy='dynamic')
+    attachments = db.relationship('EmailAttachment', backref='email', lazy='dynamic')
 
     def __init__(self, email_id, sender, subject, preffered_body,
                  plaintext_body, html_body, rtf_body):
