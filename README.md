@@ -10,6 +10,7 @@ These installation instructions _should_ work (must be using Python 3):
 
 ```
 pip install -r requirements.txt
-python setup.py
-FLASK_APP=trawler.py FLASK_DEBUG=1 flask run
+chmod +x trawler.py
+./trawler.py db upgrade
+./trawler.py runserver
 ```

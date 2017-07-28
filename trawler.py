@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 from flask import Flask, request, render_template
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate, MigrateCommand
+from flask_script import Manager
 from jsonschema import validate
 
 import base64
@@ -8,15 +10,18 @@ import dateutil.parser
 import json
 
 
+# App setup
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///trawler.db'
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+manager = Manager(app)
+manager.add_command('db', MigrateCommand)
 
 # Load JSON schemas
 schemas = dict()
 schemas['reports'] = json.load(open('schemas/report.schema'))
-
 
 @app.route('/')
 @app.route('/dashboard')
@@ -167,3 +172,7 @@ class FileHash(db.Model):
         self.file_id = file_id
         self.hash_type = hash_type
         self.hash_value = hash_value
+
+
+if __name__ == '__main__':
+    manager.run()
