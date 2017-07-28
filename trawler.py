@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, abort
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager, Server
@@ -35,10 +35,20 @@ def index():
     return render_template('index.html', reports=Report.query.all())
 
 
+# View the details of a submitted report
+@app.route('/report/<int:report_id>', methods=['GET'])
+def view_report(report_id):
+    report = Report.query.get(report_id)
+    if report is not None:
+        return render_template('report.html', report=report)
+    else:
+        abort(404)
+
+
 # Submission portal for phishing reports, only available via API access.
 # This currently has no method of authentication/verification, be wary.
 @app.route('/report', methods=['POST'])
-def report():
+def submit_report():
     # Get the JSON report and validate it against the schema
     report = request.get_json()
     validate(report, schemas['reports'])

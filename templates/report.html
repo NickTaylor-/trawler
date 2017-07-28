@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block title %}User Report | {{report.email.subject}}{% endblock %}
+{% block body %}
+	<h3>Summary</h3>
+	<table class="table">
+		<tr>
+			<td>Reporter</td>
+			<td>{{report.reporter}}</td>
+		</tr>
+		<tr>
+			<td>Report Time</td>
+			<td>{{report.report_time}}</td>
+		</tr>
+		<tr>
+			<td>Subject</td>
+			<td>{{report.email.subject}}</td>
+		</tr>
+		<tr>
+			<td>Plaintext Body</td>
+			<td>{{report.email.plaintext_body}}</td>
+		</tr>
+	</table>
+
+	<h3>Details</h3>
+	<h5>Headers</h5>
+	<table class="table">
+		{% for header in report.email.headers %}
+			<tr>
+				<td>{{header.key}}</td>
+				<td>{{header.value}}</td>
+			</tr>
+		{% endfor %}
+	</table>
+{% endblock body %}
