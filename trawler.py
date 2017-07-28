@@ -2,7 +2,7 @@
 from flask import Flask, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, MigrateCommand
-from flask_script import Manager
+from flask_script import Manager, Server
 from jsonschema import validate
 
 import base64
@@ -14,10 +14,15 @@ import json
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///trawler.db'
+
+# Database setup
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
+
+# Manager/CLI setup
 manager = Manager(app)
 manager.add_command('db', MigrateCommand)
+manager.add_command('debug', Server(use_debugger=True))
 
 # Load JSON schemas
 schemas = dict()
