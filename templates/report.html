@@ -12,12 +12,40 @@
 			<td>{{report.report_time}}</td>
 		</tr>
 		<tr>
+			<td>Sender</td>
+			<td>{{report.sender}}</td>
+		</tr>
+		<tr>
+			<td>To Recipients</td>
+			<td>
+				{% for to in report.email.tos %}
+					{{to.email}}, 
+				{% endfor %}
+			</td>
+		</tr>
+		<tr>
+			<td>CC Recipients</td>
+			<td>
+				{% for cc in report.email.ccs %}
+					{{cc.email}},
+				{% endfor %}
+			</td>
+		</tr>
+		<tr>
 			<td>Subject</td>
 			<td>{{report.email.subject}}</td>
 		</tr>
 		<tr>
 			<td>Plaintext Body</td>
 			<td>{{report.email.plaintext_body}}</td>
+		</tr>
+		<tr>
+			<td>Attachments</td>
+			<td>
+				{% for attachment in report.email.attachments %}
+					<a href="#">{{attachment.filename}}</a>
+				{% endfor %}
+			</td>
 		</tr>
 	</table>
 
