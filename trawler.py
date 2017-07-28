@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from flask import Flask, request, render_template, abort
+from flask import Flask, request, render_template, abort, send_file
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager, Server
@@ -8,6 +8,7 @@ from jsonschema import validate
 import base64
 import dateutil.parser
 import json
+import io
 
 
 # App setup
@@ -59,6 +60,14 @@ def submit_report():
         return '', 200
     else:
         return 'No JSON found in request.', 415
+
+
+# Route to download attachments/files
+@app.route('/file/<int:id>', methods=['GET'])
+def download_file(id):
+    attachment = EmailAttachment.query.get(id)
+    return send_file(io.BytesIO(attachment.file),
+                     attachment_filename=attachment.filename)
 
 
 tos = db.Table('tos',

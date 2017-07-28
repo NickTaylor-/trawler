@@ -43,7 +43,7 @@
 			<td>Attachments</td>
 			<td>
 				{% for attachment in report.email.attachments %}
-					<a href="#">{{attachment.filename}}</a>
+					<a href="/file/{{attachment.id}}">{{attachment.filename}}</a>
 				{% endfor %}
 			</td>
 		</tr>
